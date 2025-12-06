@@ -5,7 +5,7 @@
 
 <body>
     <div class="container">
-        <h2>user log {{r}}</h2>
+        <h2>All logs are deleted</h2>
         <form action="/main" method="post">
             <input type="submit" value="Main">
         </form>

@@ -10,15 +10,14 @@ def index():
 
 @app.route("/main",methods=["GET","POST"])
 def main():
-    q = request.form.get("q")
-    t = datetime.datetime.now()
-    conn = sqlite3.connect('user.db')
+    name = request.form.get("q")
+    timestamp = datetime.datetime.now()
+    conn = sqlite3.connect("user.db")
     c = conn.cursor()
-    c.execute('INSERT INTO user (name,timestamp) VALUES(?,?)',(q,t))
+    c.execute("insert into user (name,timestamp) values(?,?)",(name,timestamp))
     conn.commit()
-    c.close()
+    c.close
     conn.close()
-    print(q)
     return(render_template("main.html"))
 
 @app.route("/paynow",methods=["GET","POST"])
@@ -27,18 +26,24 @@ def paynow():
 
 @app.route("/userlog",methods=["GET","POST"])
 def userlog():
-    conn = sqlite3.connect('user.db')
+    conn = sqlite3.connect("user.db")
     c = conn.cursor()
-    c.execute('select * from user')
-    r=""
+    c.execute("select * from user")
+    r = ""
     for row in c:
         r = r + str(row)
-    c.close()
+    c.close
     conn.close()
-    return(render_template("userlog.html"))
+    return(render_template("userlog.html",r=r))
 
 @app.route("/deleteuserlog",methods=["GET","POST"])
 def deleteuserlog():
+    conn = sqlite3.connect("user.db")
+    c = conn.cursor()
+    c.execute("delete from user")
+    conn.commit()
+    c.close
+    conn.close()
     return(render_template("deleteuserlog.html"))
 
 if __name__ == "__main__":
