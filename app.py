@@ -1,8 +1,17 @@
 from flask import Flask, render_template, request
+from x402.flask.middleware import PaymentMiddleware
 import sqlite3
 import datetime
 
 app = Flask(__name__)
+payment_middleware = PaymentMiddleware(app)
+
+payment_middleware.add(
+    path="/main",
+    price="$0.01",
+    pay_to_address="0x80c4708eb53b5934393DE2DdDD494Dc751C976B9",
+    network="base-sepolia"
+)
 
 @app.route("/",methods=["GET","POST"])
 def index():
