@@ -1,4 +1,4 @@
 gunicorn
 flask
 pysqlite3
-x402.flask.middleware
+x402
