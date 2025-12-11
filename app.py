@@ -7,26 +7,34 @@ app = Flask(__name__)
 payment_middleware = PaymentMiddleware(app)
 
 payment_middleware.add(
-    path="/main",
+    path="/protected",
     price="$0.01",
     pay_to_address="0x80c4708eb53b5934393DE2DdDD494Dc751C976B9",
     network="base-sepolia"
 )
 
+flag = 1
+
 @app.route("/",methods=["GET","POST"])
 def index():
+    global flag
+    flag = 1
     return(render_template("index.html"))
 
 @app.route("/main",methods=["GET","POST"])
 def main():
-    name = request.form.get("q")
-    timestamp = datetime.datetime.now()
-    conn = sqlite3.connect("user.db")
-    c = conn.cursor()
-    c.execute("insert into user (name,timestamp) values(?,?)",(name,timestamp))
-    conn.commit()
-    c.close
-    conn.close()
+    global flag
+
+    if flag == 1:
+        name = request.form.get("q")
+        timestamp = datetime.datetime.now()
+        conn = sqlite3.connect("user.db")
+        c = conn.cursor()
+        c.execute("insert into user (name,timestamp) values(?,?)",(name,timestamp))
+        conn.commit()
+        c.close
+        conn.close()
+        flag = 0
     return(render_template("main.html"))
 
 @app.route("/paynow",methods=["GET","POST"])
